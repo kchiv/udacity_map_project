@@ -122,7 +122,7 @@ function initMap() {
 
   var largeInfowindow = new google.maps.InfoWindow();
 
-  // Style the markers a bit. This will be our listing marker icon.
+  // Style the markers a bit. This will be our landmark marker icon.
   var defaultIcon = makeMarkerIcon('0091ff');
 
   // Create a "highlighted location" marker color for when the user
@@ -157,9 +157,9 @@ function initMap() {
       this.setIcon(defaultIcon);
     });
   }
-  document.getElementById('show-listings').addEventListener('click', showListings);
+  document.getElementById('show-landmarks').addEventListener('click', showLandmarks);
 
-  document.getElementById('hide-listings').addEventListener('click', function() {
+  document.getElementById('hide-landmarks').addEventListener('click', function() {
     hideMarkers(markers);
   });
 
@@ -212,7 +212,7 @@ function populateInfoWindow(marker, infowindow) {
 }
 
 // This function will loop through the markers array and display them all.
-function showListings() {
+function showLandmarks() {
   var bounds = new google.maps.LatLngBounds();
   // Extend the boundaries of the map for each marker and display the marker
   for (var i = 0; i < markers.length; i++) {
@@ -222,7 +222,7 @@ function showListings() {
   map.fitBounds(bounds);
 }
 
-// This function will loop through the listings and hide them all.
+// This function will loop through the landmarks and hide them all.
 function hideMarkers(markers) {
   for (var i = 0; i < markers.length; i++) {
     markers[i].setMap(null);
