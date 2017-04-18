@@ -13,8 +13,10 @@
           <input id="hide-landmarks" type="button" value="Hide Landmarks">
         </div>
         <hr>
+        <button data-bind="click: function() { filter('Colosseum') }">Filter</button>
+        <button data-bind="click: function() { clearFilter() }">Clear</button>
         <div>
-          <ul data-bind="foreach: loc">
+          <ul data-bind="foreach: filterLandmarks">
             <li data-bind="text: title"></li>
           </ul>
         </div>
