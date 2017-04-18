@@ -43,6 +43,12 @@ var locations = [
   {title: 'Theatre of Marcellus', location: {lat: 41.8919, lng: 12.4799}}
 ];
 
+function AppViewModel() {
+    var self = this;
+// Locations array
+self.loc = ko.observableArray(locations);
+}
+
 function initMap() {
   // Create a styles array to use with the map.
   var styles = [
