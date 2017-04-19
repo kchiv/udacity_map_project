@@ -43,6 +43,15 @@ var locations = [
   {title: 'Theatre of Marcellus', location: {lat: 41.8919, lng: 12.4799}}
 ];
 
+var Location = function(data) {
+  var self = this;
+  this.title = data.title;
+  this.lat = data.lat;
+  this.lng = data.lng;
+
+  this.visible = ko.observable(true);
+};
+
 // Knockout Model
 function AppViewModel() {
   var self = this;
@@ -50,14 +59,26 @@ function AppViewModel() {
 
   self.currentFilter = ko.observable("");
 
+  locations.forEach(function(landmarkItem){
+    self.landmarks.push( new Location(landmarkItem));
+  });
+
   self.filterLandmarks = ko.computed(function() {
     var filter = self.currentFilter().toLowerCase();
     if (!filter) {
       self.landmarks().forEach(function(landmarkItem) {
         landmarkItem.visible(true);
-      })
+      });
+      return self.landmarks();
+    } else {
+      return ko.utils.arrayFilter(self.landmarks(), function(landmarkItem) {
+        var string = landmarkItem.title.toLowerCase();
+        var result = (string.search(filter) >= 0);
+        landmarkItem.visible(result);
+        return result;
+      });
     }
-  }
+  }, self);
 }
 
 function initMap() {

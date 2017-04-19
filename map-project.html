@@ -13,8 +13,9 @@
           <input id="hide-landmarks" type="button" value="Hide Landmarks">
         </div>
         <hr>
-        <button data-bind="click: function() { filter('Colosseum') }">Filter</button>
-        <button data-bind="click: function() { clearFilter() }">Clear</button>
+        <div class="search" id="search">
+          <input class="search-box" id="search-box" data-bind="textInput: currentFilter, valueUpdate: 'afterkeydown'" />
+        </div>
         <div>
           <ul data-bind="foreach: filterLandmarks">
             <li data-bind="text: title"></li>
