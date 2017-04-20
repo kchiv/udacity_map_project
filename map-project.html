@@ -14,7 +14,7 @@
         </div>
         <hr>
         <div class="search" id="search">
-          <input class="search-box" id="search-box" data-bind="textInput: currentFilter, valueUpdate: 'afterkeydown'" />
+          <input class="search-box" id="search-box" data-bind="textInput: currentFilter, valueUpdate: 'afterkeydown'"/>
         </div>
         <div>
           <ul data-bind="foreach: filterLandmarks">
@@ -28,7 +28,7 @@
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM&libraries=places,drawing,geometry&v=3&callback=initMap">
    </script>
    <script type="text/javascript" src="mapapp.js"></script>
-   <script type="text/javascript" src="knockout-3.4.2.js"></script>
+   <script type="text/javascript" src="lib/knockout-3.4.2.js"></script>
    <script>
      ko.applyBindings(new AppViewModel());
    </script>
