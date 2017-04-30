@@ -57,10 +57,14 @@ var Location = function(data) {
 
   this.infoWindow = new google.maps.InfoWindow({content: self.contentString});
 
+  var defaultIcon = makeMarkerIcon('ff8100');
+  var highlightedIcon = makeMarkerIcon('FFFF24');
+
   this.marker = new google.maps.Marker({
       position: new google.maps.LatLng(data.lat, data.long),
       map: map,
-      title: data.name
+      title: data.name,
+      icon: defaultIcon
   });
 
   this.showMarker = ko.computed(function() {
@@ -88,7 +92,19 @@ var Location = function(data) {
   this.bounce = function(place) {
     google.maps.event.trigger(self.marker, 'click');
   };
+
+      // Two event listeners - one for mouseover, one for mouseout,
+    // to change the colors back and forth.
+  this.marker.addListener('mouseover', function() {
+      this.setIcon(highlightedIcon);
+    });
+  this.marker.addListener('mouseout', function() {
+      this.setIcon(defaultIcon);
+    });
+
 };
+
+
 
 function AppViewModel() {
   var self = this;
@@ -279,16 +295,15 @@ function AppViewModel() {
     }
   ]
 
-
-
   this.searchTerm = ko.observable("");
 
   this.locationList = ko.observableArray([]);
 
   map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 12,
+      zoom: 14,
       center: {lat: 41.8992, lng: 12.4731},
-      styles: styles
+      styles: styles,
+      mapTypeControl: false
   });
 
   initialLocations.forEach(function(locationItem){
@@ -316,6 +331,21 @@ function AppViewModel() {
   this.mapElem.style.height = window.innerHeight - 50;
 }
 
+
+
+// This function takes in a COLOR, and then creates a new marker
+// icon of that color. The icon will be 21 px wide by 34 high, have an origin
+// of 0, 0 and be anchored at 10, 34).
+function makeMarkerIcon(markerColor) {
+  var markerImage = new google.maps.MarkerImage(
+    'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
+    '|40|_|%E2%80%A2',
+    new google.maps.Size(21, 34),
+    new google.maps.Point(0, 0),
+    new google.maps.Point(10, 34),
+    new google.maps.Size(21,34));
+  return markerImage;
+}
 
 
 /*function initMap() {
