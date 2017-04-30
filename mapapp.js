@@ -1,87 +1,324 @@
 var map;
 
-// Create a new blank array for all the landmark markers.
+/*// Create a new blank array for all the landmark markers.
 var markers = [];
 
 // Create placemarkers array to use in multiple functions to have control
 // over the number of places that show.
-var placeMarkers = [];
+var placeMarkers = [];*/
 
 // Locations array
-var locations = [
-  {title: 'Colosseum', location: {lat: 41.8902, lng: 12.4922}},
-  {title: 'Pantheon', location: {lat: 41.8986, lng: 12.4769}},
-  {title: 'Roman Forum', location: {lat: 41.8925, lng: 12.4853}},
-  {title: 'Trevi Fountain', location: {lat: 41.9009, lng: 12.4833}},
-  {title: 'St. Peter\'s Basilica', location: {lat: 41.9022, lng: 12.4539}},
-  {title: 'Castel Sant\'Angelo', location: {lat: 41.9031, lng: 12.4663}},
-  {title: 'Palatine Hill', location: {lat: 41.8894, lng: 12.4875}},
-  {title: 'Vatican Museums', location: {lat: 41.9065, lng: 12.4536}},
-  {title: 'Sistine Chapel', location: {lat: 41.9029, lng: 12.4545}},
-  {title: 'Piazza Navona', location: {lat: 41.8992, lng: 12.4731}},
-  {title: 'Spanish Steps', location: {lat: 41.9060, lng: 12.4828}},
-  {title: 'Capitoline Hill', location: {lat: 41.8934, lng: 12.4828}},
-  {title: 'Galleria Borghese', location: {lat: 41.9142, lng: 12.4921}},
-  {title: 'Basilica di Maggiore', location: {lat: 41.8976, lng: 12.4984}},
-  {title: 'Altare della Patria', location: {lat: 41.8946, lng: 12.4831}},
-  {title: 'Piazza di Spagna', location: {lat: 41.9057, lng: 12.4823}},
-  {title: 'Bocca della Verità', location: {lat: 41.8881, lng: 12.4814}},
-  {title: 'Arch of Constantine', location: {lat: 41.8898, lng: 12.4906}},
-  {title: 'Circus Maximus', location: {lat: 41.8861, lng: 12.4851}},
-  {title: 'Aventine Hill', location: {lat: 41.8825, lng: 12.4776}},
-  {title: 'Campo de\' Fiori', location: {lat: 41.8956, lng: 12.4722}},
-  {title: 'Ponte Sisto', location: {lat: 41.8924, lng: 12.4708}},
-  {title: 'Piazza Barberini', location: {lat: 41.9038, lng: 12.4886}},
-  {title: 'Quirinal Palace', location: {lat: 41.8996, lng: 12.4870}},
-  {title: 'Palazzo delle Esposizioni', location: {lat: 41.8995, lng: 12.4901}},
-  {title: 'Santa Cecilia in Trastevere', location: {lat: 41.8876, lng: 12.4758}},
-  {title: 'Trajan\'s Market', location: {lat: 41.8956, lng: 12.4862}},
-  {title: 'Trajan\'s Forum', location: {lat: 41.8952, lng: 12.4853}},
-  {title: 'Trajan\'s Column', location: {lat: 41.8958, lng: 12.4843}},
-  {title: 'Forum of Augustus', location: {lat: 41.8943, lng: 12.4869}},
-  {title: 'Capitoline Museums', location: {lat: 41.8929, lng: 12.4826}},
-  {title: 'Theatre of Marcellus', location: {lat: 41.8919, lng: 12.4799}}
+var initialLocations = [
+  {name: 'Colosseum', lat: 41.8902, long: 12.4922},
+  {name: 'Pantheon', lat: 41.8986, long: 12.4769},
+  {name: 'Roman Forum', lat: 41.8925, long: 12.4853},
+  {name: 'Trevi Fountain', lat: 41.9009, long: 12.4833},
+  {name: 'St. Peter\'s Basilica', lat: 41.9022, long: 12.4539},
+  {name: 'Castel Sant\'Angelo', lat: 41.9031, long: 12.4663},
+  {name: 'Palatine Hill', lat: 41.8894, long: 12.4875},
+  {name: 'Vatican Museums', lat: 41.9065, long: 12.4536},
+  {name: 'Sistine Chapel', lat: 41.9029, long: 12.4545},
+  {name: 'Piazza Navona', lat: 41.8992, long: 12.4731},
+  {name: 'Spanish Steps', lat: 41.9060, long: 12.4828},
+  {name: 'Capitoline Hill', lat: 41.8934, long: 12.4828},
+  {name: 'Galleria Borghese', lat: 41.9142, long: 12.4921},
+  {name: 'Basilica di Maggiore', lat: 41.8976, long: 12.4984},
+  {name: 'Altare della Patria', lat: 41.8946, long: 12.4831},
+  {name: 'Piazza di Spagna', lat: 41.9057, long: 12.4823},
+  {name: 'Bocca della Verità', lat: 41.8881, long: 12.4814},
+  {name: 'Arch of Constantine', lat: 41.8898, long: 12.4906},
+  {name: 'Circus Maximus', lat: 41.8861, long: 12.4851},
+  {name: 'Aventine Hill', lat: 41.8825, long: 12.4776},
+  {name: 'Campo de\' Fiori', lat: 41.8956, long: 12.4722},
+  {name: 'Ponte Sisto', lat: 41.8924, long: 12.4708},
+  {name: 'Piazza Barberini', lat: 41.9038, long: 12.4886},
+  {name: 'Quirinal Palace', lat: 41.8996, long: 12.4870},
+  {name: 'Palazzo delle Esposizioni', lat: 41.8995, long: 12.4901},
+  {name: 'Santa Cecilia in Trastevere', lat: 41.8876, long: 12.4758},
+  {name: 'Trajan\'s Market', lat: 41.8956, long: 12.4862},
+  {name: 'Trajan\'s Forum', lat: 41.8952, long: 12.4853},
+  {name: 'Trajan\'s Column', lat: 41.8958, long: 12.4843},
+  {name: 'Forum of Augustus', lat: 41.8943, long: 12.4869},
+  {name: 'Capitoline Museums', lat: 41.8929, long: 12.4826},
+  {name: 'Theatre of Marcellus', lat: 41.8919, long: 12.4799}
 ];
+
+
 
 var Location = function(data) {
   var self = this;
-  this.title = data.title;
+  this.name = data.name;
   this.lat = data.lat;
-  this.lng = data.lng;
+  this.long = data.long;
 
   this.visible = ko.observable(true);
-};
 
-// Knockout Model
-function AppViewModel() {
-  var self = this;
-  self.landmarks = ko.observableArray([]);
+  this.contentString = '<div class="info-window-content"><div class="title"><b>' + data.name + "</b></div></div>";
 
-  self.currentFilter = ko.observable("");
+  this.infoWindow = new google.maps.InfoWindow({content: self.contentString});
 
-  locations.forEach(function(landmarkItem){
-    self.landmarks.push( new Location(landmarkItem));
+  this.marker = new google.maps.Marker({
+      position: new google.maps.LatLng(data.lat, data.long),
+      map: map,
+      title: data.name
   });
 
-  self.filterLandmarks = ko.computed(function() {
-    var filter = self.currentFilter().toLowerCase();
-    if (!filter) {
-      self.landmarks().forEach(function(landmarkItem) {
-        landmarkItem.visible(true);
-      });
-      return self.landmarks();
+  this.showMarker = ko.computed(function() {
+    if(this.visible() === true) {
+      this.marker.setMap(map);
     } else {
-      return ko.utils.arrayFilter(self.landmarks(), function(landmarkItem) {
-        var string = landmarkItem.title.toLowerCase();
+      this.marker.setMap(null);
+    }
+    return true;
+  }, this);
+
+  this.marker.addListener('click', function(){
+    self.contentString = '<div class="info-window-content"><div class="title"><b>' + data.name + "</b></div></div>";
+
+        self.infoWindow.setContent(self.contentString);
+
+    self.infoWindow.open(map, this);
+
+    self.marker.setAnimation(google.maps.Animation.BOUNCE);
+        setTimeout(function() {
+          self.marker.setAnimation(null);
+      }, 2100);
+  });
+
+  this.bounce = function(place) {
+    google.maps.event.trigger(self.marker, 'click');
+  };
+};
+
+function AppViewModel() {
+  var self = this;
+
+  var styles = [
+    {
+        "elementType": "labels",
+        "stylers": [
+            {
+                "visibility": "off"
+            },
+            {
+                "color": "#f49f53"
+            }
+        ]
+    },
+    {
+        "featureType": "landscape",
+        "stylers": [
+            {
+                "color": "#f9ddc5"
+            },
+            {
+                "lightness": -7
+            }
+        ]
+    },
+    {
+        "featureType": "road",
+        "stylers": [
+            {
+                "color": "#813033"
+            },
+            {
+                "lightness": 43
+            }
+        ]
+    },
+    {
+        "featureType": "poi.business",
+        "stylers": [
+            {
+                "color": "#645c20"
+            },
+            {
+                "lightness": 38
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "stylers": [
+            {
+                "color": "#1994bf"
+            },
+            {
+                "saturation": -69
+            },
+            {
+                "gamma": 0.99
+            },
+            {
+                "lightness": 43
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#f19f53"
+            },
+            {
+                "weight": 1.3
+            },
+            {
+                "visibility": "on"
+            },
+            {
+                "lightness": 16
+            }
+        ]
+    },
+    {
+        "featureType": "poi.business"
+    },
+    {
+        "featureType": "poi.park",
+        "stylers": [
+            {
+                "color": "#645c20"
+            },
+            {
+                "lightness": 39
+            }
+        ]
+    },
+    {
+        "featureType": "poi.school",
+        "stylers": [
+            {
+                "color": "#a95521"
+            },
+            {
+                "lightness": 35
+            }
+        ]
+    },
+    {
+        "featureType": "poi.medical",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#813033"
+            },
+            {
+                "lightness": 38
+            },
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "elementType": "labels"
+    },
+    {
+        "featureType": "poi.sports_complex",
+        "stylers": [
+            {
+                "color": "#9e5916"
+            },
+            {
+                "lightness": 32
+            }
+        ]
+    },
+    {
+        "featureType": "poi.government",
+        "stylers": [
+            {
+                "color": "#9e5916"
+            },
+            {
+                "lightness": 46
+            }
+        ]
+    },
+    {
+        "featureType": "transit.station",
+        "stylers": [
+            {
+                "visibility": "off"
+            }
+        ]
+    },
+    {
+        "featureType": "transit.line",
+        "stylers": [
+            {
+                "color": "#813033"
+            },
+            {
+                "lightness": 22
+            }
+        ]
+    },
+    {
+        "featureType": "transit",
+        "stylers": [
+            {
+                "lightness": 38
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#f19f53"
+            },
+            {
+                "lightness": -10
+            }
+        ]
+    }
+  ]
+
+
+
+  this.searchTerm = ko.observable("");
+
+  this.locationList = ko.observableArray([]);
+
+  map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 12,
+      center: {lat: 41.8992, lng: 12.4731},
+      styles: styles
+  });
+
+  initialLocations.forEach(function(locationItem){
+    self.locationList.push( new Location(locationItem));
+  });
+
+  this.filteredList = ko.computed( function() {
+    var filter = self.searchTerm().toLowerCase();
+    if (!filter) {
+      self.locationList().forEach(function(locationItem){
+        locationItem.visible(true);
+      });
+      return self.locationList();
+    } else {
+      return ko.utils.arrayFilter(self.locationList(), function(locationItem) {
+        var string = locationItem.name.toLowerCase();
         var result = (string.search(filter) >= 0);
-        landmarkItem.visible(result);
+        locationItem.visible(result);
         return result;
       });
     }
   }, self);
+
+  this.mapElem = document.getElementById('map');
+  this.mapElem.style.height = window.innerHeight - 50;
 }
 
-function initMap() {
+
+
+/*function initMap() {
   // Create a styles array to use with the map.
   var styles = [
     {
@@ -150,13 +387,6 @@ function initMap() {
     }
   ];
 
-  // Constructor creates a new map - only center and zoom are required.
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: 41.8992, lng: 12.4731},
-    zoom: 13,
-    styles: styles,
-    mapTypeControl: false
-  });
 
   var largeInfowindow = new google.maps.InfoWindow();
 
@@ -195,11 +425,6 @@ function initMap() {
       this.setIcon(defaultIcon);
     });
   }
-  document.getElementById('show-landmarks').addEventListener('click', showLandmarks);
-
-  document.getElementById('hide-landmarks').addEventListener('click', function() {
-    hideMarkers(markers);
-  });
 
 }
 
@@ -246,24 +471,6 @@ function populateInfoWindow(marker, infowindow) {
     streetViewService.getPanoramaByLocation(marker.position, radius, getStreetView);
     // Open the infowindow on the correct marker.
     infowindow.open(map, marker);
-  }
-}
-
-// This function will loop through the markers array and display them all.
-function showLandmarks() {
-  var bounds = new google.maps.LatLngBounds();
-  // Extend the boundaries of the map for each marker and display the marker
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(map);
-    bounds.extend(markers[i].position);
-  }
-  map.fitBounds(bounds);
-}
-
-// This function will loop through the landmarks and hide them all.
-function hideMarkers(markers) {
-  for (var i = 0; i < markers.length; i++) {
-    markers[i].setMap(null);
   }
 }
 
@@ -325,4 +532,10 @@ function getPlacesDetails(marker, infowindow) {
       });
     }
   });
+}
+*/
+
+
+function initialize() {
+  ko.applyBindings(new AppViewModel());
 }

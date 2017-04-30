@@ -8,29 +8,22 @@
     <div class="container">
       <div class="options-box">
         <h1>Where do you want to go in Rome?</h1>
-        <div>
-          <input id="show-landmarks" type="button" value="Show Landmarks">
-          <input id="hide-landmarks" type="button" value="Hide Landmarks">
-        </div>
         <hr>
         <div class="search" id="search">
-          <input class="search-box" id="search-box" data-bind="textInput: currentFilter, valueUpdate: 'afterkeydown'"/>
+          <input class="search-box" id="search-box" data-bind="textInput: searchTerm, valueUpdate: 'afterkeydown'"/>
         </div>
         <div>
-          <ul data-bind="foreach: filterLandmarks">
-            <li data-bind="text: title"></li>
+          <ul data-bind="foreach: filteredList">
+            <li data-bind="text: name, click: bounce"></li>
           </ul>
         </div>
       </div>
       <div id="map"></div>
     </div>
    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM&libraries=places,drawing,geometry&v=3&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM&libraries=places,geometry&v=3&callback=initialize">
    </script>
    <script type="text/javascript" src="mapapp.js"></script>
    <script type="text/javascript" src="lib/knockout-3.4.2.js"></script>
-   <script>
-     ko.applyBindings(new AppViewModel());
-   </script>
  </body>
 </html>
