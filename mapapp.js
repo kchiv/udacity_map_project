@@ -55,7 +55,7 @@ var Location = function(data) {
   this.visible = ko.observable(true);
 
   this.contentString = '<div class="info-window-content"><div class="title"><b>' + data.name + "</b></div>" +
-      '<div class=' + data.class + '>' + data.lat + "</a></div>";
+      '<div class="' + data.class + '"></div>';
 
   this.infoWindow = new google.maps.InfoWindow({
     content: self.contentString
@@ -92,7 +92,7 @@ var Location = function(data) {
   // Bounce animation on mouseover
   this.marker.addListener('click', function(){
     self.contentString = '<div class="info-window-content"><div class="title"><b>' + data.name + "</b></div>" +
-        '<div class=' + data.class + '>' + data.lat + "</a></div>";
+        '<div class="' + data.class + '"></div>';
 
 
           $.getJSON(service_url + '?callback=?', self.params, function(response) {
