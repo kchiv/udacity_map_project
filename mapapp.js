@@ -72,14 +72,24 @@ var Location = function(data) {
     return true;
   }, this);
 
+  var flickrAPI = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=3929dc66b4439e3261143f1187ad2031&text=Altare+della+Patria&per_page=10&format=json&nojsoncallback=1'
+
   var service_url = 'https://kgsearch.googleapis.com/v1/entities:search';
 
   this.params = {
-          'query': data.name,
-          'limit': 1,
-          'indent': true,
-          'key' : 'AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM',
-      };
+    'query': data.name,
+    'limit': 1,
+    'indent': true,
+    'key' : 'AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM',
+  };
+
+  this.flickParams = {
+    'api_key': '3929dc66b4439e3261143f1187ad2031',
+    'text': data.name,
+    'per_page': 10,
+    'format': 'json',
+    'nojsoncallback': 1
+  }
 
   // Bounce animation on mouseover
   this.marker.addListener('click', function(){
@@ -88,11 +98,10 @@ var Location = function(data) {
 
 
     $.getJSON(service_url + '?callback=?', self.params, function(response) {
-    $.each(response.itemListElement, function(i, element) {
-      $('<div>', {id:'theBody', text:element['result']['detailedDescription']['articleBody']}).appendTo('.' + data.class);
-      $('.' + data.class).prepend($('<img>',{id:'theImg',src:element['result']['image']['contentUrl']}));
-    });
-
+      $.each(response.itemListElement, function(i, element) {
+        $('<div>', {id:'theBody', text:element['result']['detailedDescription']['articleBody']}).appendTo('.' + data.class);
+        $('.' + data.class).prepend($('<img>',{id:'theImg',src:element['result']['image']['contentUrl']}));
+      });
     });
 
         self.infoWindow.setContent(self.contentString);
