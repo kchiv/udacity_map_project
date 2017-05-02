@@ -1,12 +1,5 @@
 var map;
 
-/*// Create a new blank array for all the landmark markers.
-var markers = [];
-
-// Create placemarkers array to use in multiple functions to have control
-// over the number of places that show.
-var placeMarkers = [];*/
-
 // Locations array
 var initialLocations = [
   {name: 'Colosseum', lat: 41.8902, long: 12.4922, class: 'colo'},
@@ -54,8 +47,7 @@ var Location = function(data) {
 
   this.visible = ko.observable(true);
 
-  this.contentString = '<div class="info-window-content"><div class="title"><b>' + data.name + "</b></div>" +
-      '<div class="' + data.class + '"></div>';
+  this.contentString = '';
 
   this.infoWindow = new google.maps.InfoWindow({
     content: self.contentString
@@ -91,15 +83,17 @@ var Location = function(data) {
 
   // Bounce animation on mouseover
   this.marker.addListener('click', function(){
-    self.contentString = '<div class="info-window-content"><div class="title"><b>' + data.name + "</b></div>" +
+    self.contentString = '<div class="info-window-content"><div class="title"><h2>' + data.name + "</h2></div>" +
         '<div class="' + data.class + '"></div>';
 
 
-          $.getJSON(service_url + '?callback=?', self.params, function(response) {
+    $.getJSON(service_url + '?callback=?', self.params, function(response) {
     $.each(response.itemListElement, function(i, element) {
-      $('<div>', {text:element['result']['detailedDescription']['articleBody']}).appendTo('.' + data.class);
+      $('<div>', {id:'theBody', text:element['result']['detailedDescription']['articleBody']}).appendTo('.' + data.class);
+      $('.' + data.class).prepend($('<img>',{id:'theImg',src:element['result']['image']['contentUrl']}));
     });
-  });
+
+    });
 
         self.infoWindow.setContent(self.contentString);
 
