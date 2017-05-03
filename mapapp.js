@@ -72,7 +72,7 @@ var Location = function(data) {
     return true;
   }, this);
 
-  var flickrAPI = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=3929dc66b4439e3261143f1187ad2031&text=Altare+della+Patria&per_page=10&format=json&nojsoncallback=1'
+  var flickrAPI = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=3929dc66b4439e3261143f1187ad2031&text=';
 
   var service_url = 'https://kgsearch.googleapis.com/v1/entities:search';
 
@@ -83,19 +83,19 @@ var Location = function(data) {
     'key' : 'AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM',
   };
 
-  this.flickParams = {
-    'api_key': '3929dc66b4439e3261143f1187ad2031',
-    'text': data.name,
-    'per_page': 10,
-    'format': 'json',
-    'nojsoncallback': 1
-  }
-
   // Bounce animation on mouseover
   this.marker.addListener('click', function(){
     self.contentString = '<div class="info-window-content"><div class="title"><h2>' + data.name + "</h2></div>" +
         '<div class="' + data.class + '"></div>';
 
+
+    $.getJSON(flickrAPI + data.name + "&per_page=10&format=json&jsoncallback=?", function(response){
+      $.each(response.photos.photo, function(i, element){
+        src = "http://farm"+ element.farm +".static.flickr.com/"+ element.server +"/"+ element.id +"_"+ element.secret +"_m.jpg";
+        $("<img/>").attr("src", src).appendTo("." + data.class);
+        if ( i == 3 ) return false;
+      });
+    });
 
     $.getJSON(service_url + '?callback=?', self.params, function(response) {
       $.each(response.itemListElement, function(i, element) {
