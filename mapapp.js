@@ -86,14 +86,14 @@ var Location = function(data) {
   // Bounce animation on mouseover
   this.marker.addListener('click', function(){
     self.contentString = '<div class="info-window-content"><div class="title"><h2>' + data.name + "</h2></div>" +
-        '<div class="' + data.class + '"></div>' +
-        '<div id="accordion"><h2>View More Images</h2><div class="flickimages"></div></div>';
+        '<div class="accordion"><h2>View Details</h2><div class="' + data.class + '"></div>' +
+        '<h2>View Images</h2><div class="flickimages"></div></div>';
 
-    $.getJSON(flickrAPI + data.name + "&per_page=10&format=json&jsoncallback=?", function(response){
+
+    $.getJSON(flickrAPI + data.name + "&per_page=15&format=json&jsoncallback=?", function(response){
       $.each(response.photos.photo, function(i, element){
         src = "http://farm"+ element.farm +".static.flickr.com/"+ element.server +"/"+ element.id +"_"+ element.secret +"_m.jpg";
         $("<img/>").attr("src", src).appendTo(".flickimages");
-        //if ( i == 3 ) return false;
       });
     });
 
@@ -106,16 +106,19 @@ var Location = function(data) {
 
     self.infoWindow.setContent(self.contentString);
 
+    map.panTo(self.marker.getPosition());
+
     self.infoWindow.open(map, this);
 
     self.marker.setAnimation(google.maps.Animation.BOUNCE);
-        setTimeout(function() {
-          self.marker.setAnimation(null);
-      }, 2100);
+    
+    setTimeout(function() {
+      self.marker.setAnimation(null);
+    }, 2100);
 
     //expand collapse jquery function
     $( function() {
-      $( "#accordion" ).accordion({
+      $( ".accordion" ).accordion({
         collapsible: true,
         active: false
       });

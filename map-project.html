@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-  <link rel="stylesheet" type="text/css" href="style.css">
-  <title>Rome Tourism App</title>
+    <title>Rome Tourism App</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-
-     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   </head>
   <body>
     <div class="container">
@@ -14,11 +14,15 @@
         <h1>Where do you want to go in Rome?</h1>
         <hr>
         <div class="search" id="search">
-          <input class="search-box" id="search-box" data-bind="textInput: searchTerm, valueUpdate: 'afterkeydown'"/>
+          <input class="form-control" type="text" placeholder="Enter The Location" data-bind="textInput: searchTerm, valueUpdate: 'afterkeydown'"/>
         </div>
+        <hr>
         <div>
           <ul data-bind="foreach: filteredList">
-            <li data-bind="text: name, click: bounce"></li>
+              <a class="btn btn-default" href="#" role="button">
+                <li data-bind="text: name, click: bounce"></li>
+              </a>
+              <br>
           </ul>
         </div>
       </div>
