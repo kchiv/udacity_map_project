@@ -1,6 +1,6 @@
 var map;
 
-// Locations array
+// Location data
 var initialLocations = [
   {name: 'Colosseum', lat: 41.8902, long: 12.4922, class: 'colo'},
   {name: 'Pantheon', lat: 41.8986, long: 12.4769, class: 'pan'},
@@ -47,15 +47,19 @@ var Location = function(data) {
 
   this.visible = ko.observable(true);
 
+  // Creates empty string for infowindow
   this.contentString = '';
 
+  // Creates infowindow object
   this.infoWindow = new google.maps.InfoWindow({
     content: self.contentString
   });
 
+  // Marker icon styles
   var defaultIcon = makeMarkerIcon('ff8100');
   var highlightedIcon = makeMarkerIcon('FFFF24');
 
+  // Creates marker objects
   this.marker = new google.maps.Marker({
       position: new google.maps.LatLng(data.lat, data.long),
       map: map,
@@ -63,6 +67,7 @@ var Location = function(data) {
       icon: defaultIcon
   });
 
+  // Shows markers on map if locations on list are visible
   this.showMarker = ko.computed(function() {
     if(this.visible() === true) {
       this.marker.setMap(map);
@@ -72,10 +77,13 @@ var Location = function(data) {
     return true;
   }, this);
 
+  // Endpoint for Flickr API
   var flickrAPI = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=3929dc66b4439e3261143f1187ad2031&text=';
 
+  // Endpoint for knowledge graph API
   var service_url = 'https://kgsearch.googleapis.com/v1/entities:search';
 
+  // Parameters for knowledge graph API
   this.params = {
     'query': data.name,
     'limit': 1,
@@ -83,13 +91,14 @@ var Location = function(data) {
     'key' : 'AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM',
   };
 
-  // Bounce animation on mouseover
+  // Adding click listeners on markers
   this.marker.addListener('click', function(){
+    // Populates content string for infowindow
     self.contentString = '<div class="info-window-content"><div class="title"><h2>' + data.name + "</h2></div>" +
         '<div class="accordion"><h2>View Details</h2><div class="' + data.class + '"></div>' +
         '<h2>View Images</h2><div class="flickimages"></div></div>';
 
-
+    // Gets image data from Flickr API and adds it to infowindow
     $.getJSON(flickrAPI + data.name + "&per_page=15&format=json&jsoncallback=?", function(response){
       $.each(response.photos.photo, function(i, element){
         src = "http://farm"+ element.farm +".static.flickr.com/"+ element.server +"/"+ element.id +"_"+ element.secret +"_m.jpg";
@@ -97,6 +106,7 @@ var Location = function(data) {
       });
     });
 
+    // Gets image and description data from Google Knowledge Graph API
     $.getJSON(service_url + '?callback=?', self.params, function(response) {
       $.each(response.itemListElement, function(i, element) {
         $('<div>', {id:'theBody', text:element['result']['detailedDescription']['articleBody']}).appendTo('.' + data.class);
@@ -104,19 +114,24 @@ var Location = function(data) {
       });
     });
 
+    // Sets infowindow content 
     self.infoWindow.setContent(self.contentString);
 
+    // Centers map on clicked marker
     map.panTo(self.marker.getPosition());
 
-    self.infoWindow.open(map, this);
+    // Attach the info window to a new marker
+    self.infoWindow.open(map, self.marker);
 
+    // Creates marker animation
     self.marker.setAnimation(google.maps.Animation.BOUNCE);
     
+    // Limits bounce animation
     setTimeout(function() {
       self.marker.setAnimation(null);
-    }, 2100);
+    }, 3000);
 
-    //expand collapse jquery function
+    // Expand collapse jQuery function
     $( function() {
       $( ".accordion" ).accordion({
         collapsible: true,
@@ -126,7 +141,8 @@ var Location = function(data) {
 
   });
 
-  this.bounce = function(place) {
+  // Triggers marker when filterable list item is clicked
+  this.animate = function() {
     google.maps.event.trigger(self.marker, 'click');
   };
 
@@ -137,6 +153,7 @@ var Location = function(data) {
 function AppViewModel() {
   var self = this;
 
+  // Defines styles for the map
   var styles = [
     { "elementType": "labels",
         "stylers": [
@@ -227,6 +244,7 @@ function AppViewModel() {
 
   this.locationList = ko.observableArray([]);
 
+  // Creates map object
   map = new google.maps.Map(document.getElementById('map'), {
       zoom: 14,
       center: {lat: 41.8992, lng: 12.4731},
@@ -234,10 +252,12 @@ function AppViewModel() {
       mapTypeControl: false
   });
 
+  // Adds locations to observable array
   initialLocations.forEach(function(locationItem){
     self.locationList.push( new Location(locationItem));
   });
 
+  // Filters locations based upon input in input field
   this.filteredList = ko.computed( function() {
     var filter = self.searchTerm().toLowerCase();
     if (!filter) {
@@ -255,14 +275,9 @@ function AppViewModel() {
     }
   }, self);
 
-  this.mapElem = document.getElementById('map');
-  this.mapElem.style.height = window.innerHeight - 50;
 }
 
-
-// This function takes in a COLOR, and then creates a new marker
-// icon of that color. The icon will be 21 px wide by 34 high, have an origin
-// of 0, 0 and be anchored at 10, 34).
+// Function to create custom marker color
 function makeMarkerIcon(markerColor) {
   var markerImage = new google.maps.MarkerImage(
     'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
@@ -274,6 +289,7 @@ function makeMarkerIcon(markerColor) {
   return markerImage;
 }
 
+// Initialize Knockout viewmodel
 function initialize() {
   ko.applyBindings(new AppViewModel());
 }
