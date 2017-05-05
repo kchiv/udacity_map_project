@@ -1,7 +1,5 @@
-var map;
-
 // Location data
-var initialLocations = [
+var locationData = [
   {name: 'Colosseum', lat: 41.8902, long: 12.4922, class: 'colo'},
   {name: 'Pantheon', lat: 41.8986, long: 12.4769, class: 'pan'},
   {name: 'Roman Forum', lat: 41.8925, long: 12.4853, class: 'forum'},
@@ -38,7 +36,7 @@ var initialLocations = [
 
 
 
-var Location = function(data) {
+var Landmark = function(data) {
   var self = this;
   this.name = data.name;
   this.lat = data.lat;
@@ -253,8 +251,8 @@ function AppViewModel() {
   });
 
   // Adds locations to observable array
-  initialLocations.forEach(function(locationItem){
-    self.locationList.push( new Location(locationItem));
+  locationData.forEach(function(locationItem){
+    self.locationList.push( new Landmark(locationItem));
   });
 
   // Filters locations based upon input in input field
