@@ -93,14 +93,14 @@ var Location = function(data) {
     $.getJSON(flickrAPI + data.name + "&per_page=15&format=json&jsoncallback=?", function(response){
       $.each(response.photos.photo, function(i, element){
         src = "http://farm"+ element.farm +".static.flickr.com/"+ element.server +"/"+ element.id +"_"+ element.secret +"_m.jpg";
-        $("<img/>").attr("src", src).appendTo(".flickimages");
+        $('<img class="img-thumbnail img-responsive">').attr("src", src).appendTo(".flickimages");
       });
     });
 
     $.getJSON(service_url + '?callback=?', self.params, function(response) {
       $.each(response.itemListElement, function(i, element) {
         $('<div>', {id:'theBody', text:element['result']['detailedDescription']['articleBody']}).appendTo('.' + data.class);
-        $('.' + data.class).prepend($('<img>',{id:'theImg',src:element['result']['image']['contentUrl']}));
+        $('.' + data.class).prepend($('<img>',{class:'img-thumbnail img-responsive center-block', id:'theImg',src:element['result']['image']['contentUrl']}));
       });
     });
 

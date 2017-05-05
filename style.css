@@ -57,6 +57,12 @@ hr {
   width: 340px;
 }
 
+#scroll-container {
+  overflow: scroll;
+  max-height:300px;
+  height: 70%;
+}
+
 #pano {
   width: 200px;
   height: 200px;
@@ -85,3 +91,22 @@ hr {
   width: 24%;
 }
 
+.info-window-content {
+  width: 600px;
+}
+
+.ui-accordion-content {
+  height: 300px;
+}
+
+.title {
+  text-align: center;
+}
+
+#theImg {
+  align-content: center;
+}
+
+#theBody {
+  padding-top: 10px;
+}

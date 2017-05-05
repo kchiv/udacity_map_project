@@ -17,7 +17,7 @@
           <input class="form-control" type="text" placeholder="Enter The Location" data-bind="textInput: searchTerm, valueUpdate: 'afterkeydown'"/>
         </div>
         <hr>
-        <div>
+        <div id="scroll-container">
           <ul data-bind="foreach: filteredList">
               <a class="btn btn-default" href="#" role="button">
                 <li data-bind="text: name, click: bounce"></li>
