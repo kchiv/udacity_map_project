@@ -7,26 +7,31 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   </head>
   <body>
     <div class="container">
-      <div class="options-box">
-        <h1>Where do you want to go in Rome?</h1>
-        <hr>
-        <div class="search" id="search">
-          <input class="form-control" type="text" placeholder="Enter The Location" data-bind="textInput: searchTerm, valueUpdate: 'afterkeydown'"/>
+      <div class="row">
+        <div class="col-md-4">
+          <h1>Where do you want to go in Rome?</h1>
+          <hr>
+          <div class="search" id="search">
+            <input class="form-control" type="text" placeholder="Enter The Location" data-bind="textInput: searchTerm, valueUpdate: 'afterkeydown'"/>
+          </div>
+          <hr>
+          <div id="scroll-container">
+            <ul data-bind="foreach: filteredList">
+                <a class="btn btn-default" href="#" role="button">
+                  <li data-bind="text: name, click: animate"></li>
+                </a>
+                <br>
+            </ul>
+          </div>
         </div>
-        <hr>
-        <div id="scroll-container">
-          <ul data-bind="foreach: filteredList">
-              <a class="btn btn-default" href="#" role="button">
-                <li data-bind="text: name, click: animate"></li>
-              </a>
-              <br>
-          </ul>
+        <div class="col-md-8">
+          <div id="map"></div>
         </div>
       </div>
-      <div id="map"></div>
     </div>
    <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM&libraries=places,geometry&v=3&callback=initialize">
