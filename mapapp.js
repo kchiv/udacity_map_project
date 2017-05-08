@@ -37,7 +37,9 @@ var locationData = [
 
 
 var Landmark = function(data) {
+  
   var self = this;
+
   this.name = data.name;
   this.lat = data.lat;
   this.long = data.long;
@@ -46,11 +48,11 @@ var Landmark = function(data) {
   this.visible = ko.observable(true);
 
   // Creates empty string for infowindow
-  this.contentString = '';
+  this.infoString = '';
 
   // Creates infowindow object
   this.infoWindow = new google.maps.InfoWindow({
-    content: self.contentString
+    content: self.infoString
   });
 
   // Marker icon styles
@@ -92,7 +94,7 @@ var Landmark = function(data) {
   // Adding click listeners on markers
   this.marker.addListener('click', function(){
     // Populates content string for infowindow
-    self.contentString = '<div class="info-window-content"><div class="title"><h2>' + data.name + "</h2></div>" +
+    self.infoString = '<div class="info-window-content"><div class="title"><h2>' + data.name + "</h2></div>" +
         '<div class="accordion"><h2>View Details</h2><div class="' + data.class + '"></div>' +
         '<h2>View Images</h2><div class="flickimages"></div></div>';
 
@@ -113,7 +115,7 @@ var Landmark = function(data) {
     });
 
     // Sets infowindow content 
-    self.infoWindow.setContent(self.contentString);
+    self.infoWindow.setContent(self.infoString);
 
     // Centers map on clicked marker
     map.panTo(self.marker.getPosition());

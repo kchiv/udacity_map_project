@@ -13,18 +13,17 @@
     <div class="container">
       <div class="row">
         <div class="col-md-4">
-          <h1>Where do you want to go in Rome?</h1>
+          <h1 class="title">Landmarks In Rome</h1>
           <hr>
           <div class="search" id="search">
             <input class="form-control" type="text" placeholder="Enter The Location" data-bind="textInput: searchTerm, valueUpdate: 'afterkeydown'"/>
           </div>
           <hr>
-          <div id="scroll-container">
+          <div id="scroll-container" class="btn-group btn-group-justified">
             <ul data-bind="foreach: filteredList">
-                <a class="btn btn-default" href="#" role="button">
+                <a class="btn btn-default btn-block" href="#" role="button">
                   <li data-bind="text: name, click: animate"></li>
                 </a>
-                <br>
             </ul>
           </div>
         </div>
