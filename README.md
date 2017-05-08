@@ -19,4 +19,4 @@ In this app users can select landmark locations on the map or from the list of l
 
 ## APIs
 
-For this project I used two Google APIs. 
+For this project I used two Google APIs, the maps API and the knowledge graph API. Additionally, the Flickr API was used to allow more images to be viewed for each landmark.
