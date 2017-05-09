@@ -36,31 +36,29 @@ var locationData = [
 
 
 
-var Landmark = function(data) {
+function Landmark(data) {
   
   var self = this;
 
-  this.name = data.name;
-  this.lat = data.lat;
-  this.long = data.long;
-  this.class = data.class;
+  self.name = data.name;
+  self.lat = data.lat;
+  self.long = data.long;
+  self.class = data.class;
 
-  this.visible = ko.observable(true);
+  self.visible = ko.observable(true);
 
   // Creates empty string for infowindow
-  this.infoString = '';
+  self.infoString = '';
 
   // Creates infowindow object
-  this.infoWindow = new google.maps.InfoWindow({
-    content: self.infoString
-  });
+  self.infoWindow = new google.maps.InfoWindow();
 
   // Marker icon styles
   var defaultIcon = makeMarkerIcon('ff8100');
   var highlightedIcon = makeMarkerIcon('FFFF24');
 
   // Creates marker objects
-  this.marker = new google.maps.Marker({
+  self.marker = new google.maps.Marker({
       position: new google.maps.LatLng(data.lat, data.long),
       map: map,
       title: data.name,
@@ -68,15 +66,81 @@ var Landmark = function(data) {
   });
 
   // Shows markers on map if locations on list are visible
-  this.showMarker = ko.computed(function() {
-    if(this.visible() === true) {
-      this.marker.setMap(map);
+  self.showMarker = ko.computed(function() {
+    if(self.visible() === true) {
+      self.marker.setMap(map);
     } else {
-      this.marker.setMap(null);
+      self.marker.setMap(null);
     }
     return true;
-  }, this);
+  }, self);
 
+
+
+
+
+
+
+  self.showInfoWindow = function() {
+    if (!self.infoWindow.getContent()) {
+      self.infoWindow.setContent('Loading content...');
+      var content = '<div class="info-window-content"><div class="title"><h2>' + self.name + "</h2></div>";
+      content += '<div class="accordion"><h2>View Details</h2><div class="' + self.class + '"></div>';
+      content += '<h2>View Images</h2><div class="flickimages"></div></div>';
+      self.infoWindow.setContent(content);
+    }
+
+    self.infoWindow.open(map, self.marker);
+
+  }
+
+  self.activate = function() {
+    if (Landmark.prototype.active) {
+      if (Landmark.prototype.active !== self) {
+        Landmark.prototype.active.deactivate();
+      }
+    }
+
+    self.marker.setAnimation(google.maps.Animation.BOUNCE);
+    self.showInfoWindow();
+
+    Landmark.prototype.active = self;
+  };
+
+  self.deactivate = function() {
+    self.marker.setAnimation(null);
+    self.infoWindow.close();
+
+    Landmark.prototype.active = null;
+  };
+
+  self.focus = function() {
+    map.panTo({lat: self.lat, lng: self.long});
+    self.activate();
+  };
+
+  self.mapMarkerClickHandler = function() {
+    if (Landmark.prototype.active === self) {
+      self.deactivate();
+    } else {
+      self.activate();
+    }
+  };
+
+  self.infoWindowCloseClickHandler = function() {
+    self.deactivate();
+  }
+
+  self.marker.addListener('click', self.mapMarkerClickHandler);
+
+  self.infoWindow.addListener('closeclick', self.infoWindowCloseClickHandler);
+
+
+
+
+
+
+/*
   // Endpoint for Flickr API
   var flickrAPI = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=3929dc66b4439e3261143f1187ad2031&text=';
 
@@ -84,15 +148,18 @@ var Landmark = function(data) {
   var service_url = 'https://kgsearch.googleapis.com/v1/entities:search';
 
   // Parameters for knowledge graph API
-  this.params = {
+  self.params = {
     'query': data.name,
     'limit': 1,
     'indent': true,
     'key' : 'AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM',
   };
+*/
 
+
+/* 
   // Adding click listeners on markers
-  this.marker.addListener('click', function(){
+ self.marker.addListener('click', function(){
     // Populates content string for infowindow
     self.infoString = '<div class="info-window-content"><div class="title"><h2>' + data.name + "</h2></div>" +
         '<div class="accordion"><h2>View Details</h2><div class="' + data.class + '"></div>' +
@@ -140,13 +207,19 @@ var Landmark = function(data) {
     } );
 
   });
+*/
 
+/*
   // Triggers marker when filterable list item is clicked
-  this.animate = function() {
+  self.animate = function() {
     google.maps.event.trigger(self.marker, 'click');
   };
+*/
 
 };
+
+
+Landmark.prototype.active = null;
 
 
 
