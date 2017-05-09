@@ -45,8 +45,6 @@ function Landmark(data) {
   self.long = data.long;
   self.class = data.class;
 
-  self.visible = ko.observable(true);
-
   // Creates empty string for infowindow
   self.infoString = '';
 
@@ -59,9 +57,9 @@ function Landmark(data) {
 
   // Creates marker objects
   self.marker = new google.maps.Marker({
-      position: new google.maps.LatLng(data.lat, data.long),
+      position: {lat: self.lat, lng: self.long},
       map: map,
-      title: data.name,
+      title: self.name,
       icon: defaultIcon
   });
 
@@ -216,7 +214,7 @@ function Landmark(data) {
   };
 */
 
-};
+}
 
 
 Landmark.prototype.active = null;
@@ -317,6 +315,9 @@ function AppViewModel() {
 
   this.locationList = ko.observableArray([]);
 
+  self.visible = ko.observable(true);
+
+/*
   // Creates map object
   map = new google.maps.Map(document.getElementById('map'), {
       zoom: 14,
@@ -324,6 +325,7 @@ function AppViewModel() {
       styles: styles,
       mapTypeControl: false
   });
+*/
 
   // Adds locations to observable array
   locationData.forEach(function(locationItem){
@@ -350,6 +352,29 @@ function AppViewModel() {
 
 }
 
+
+
+
+
+
+
+function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 14,
+      center: {lat: 41.8992, lng: 12.4731},
+      styles: styles,
+      mapTypeControl: false
+    });
+
+    // Activate Knockout once the map is initialized
+    ko.applyBindings(new AppViewModel());
+}
+
+
+
+
+
+
 // Function to create custom marker color
 function makeMarkerIcon(markerColor) {
   var markerImage = new google.maps.MarkerImage(
@@ -360,9 +385,4 @@ function makeMarkerIcon(markerColor) {
     new google.maps.Point(10, 34),
     new google.maps.Size(21,34));
   return markerImage;
-}
-
-// Initialize Knockout viewmodel
-function initialize() {
-  ko.applyBindings(new AppViewModel());
 }
