@@ -109,8 +109,8 @@ var Landmark = function(data) {
     // Gets image and description data from Google Knowledge Graph API
     $.getJSON(service_url + '?callback=?', self.params, function(response) {
       $.each(response.itemListElement, function(i, element) {
-        $('<div>', {id:'theBody', text:element['result']['detailedDescription']['articleBody']}).appendTo('.' + data.class);
-        $('.' + data.class).prepend($('<img>',{class:'img-thumbnail img-responsive center-block', id:'theImg',src:element['result']['image']['contentUrl']}));
+        $('<div>', {id:'thebody', text:element['result']['detailedDescription']['articleBody']}).appendTo('.' + data.class);
+        $('.' + data.class).prepend($('<img>',{class:'img-thumbnail img-responsive center-block', id:'theimg',src:element['result']['image']['contentUrl']}));
       });
     });
 
