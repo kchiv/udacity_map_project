@@ -20,3 +20,7 @@ In this app users can select landmark locations on the map or from the list of l
 ## APIs
 
 For this project I used two Google APIs, the maps API and the knowledge graph API. Additionally, the Flickr API was used to allow more images to be viewed for each landmark.
+
+## How to Run the App
+
+To run the app locally, download all the files from github. Once all the files are downloaded, open the **map-project.html** file within your browser. Once this file is open in your browser, you'll be able to use the app.
