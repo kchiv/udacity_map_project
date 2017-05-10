@@ -1,3 +1,5 @@
+var map;
+
 // Location data
 var locationData = [
   {name: 'Colosseum', lat: 41.8902, long: 12.4922, class: 'colo'},
@@ -36,7 +38,7 @@ var locationData = [
 
 
 
-function Landmark(data) {
+var Landmark = function(data) {
   
   var self = this;
 
@@ -44,6 +46,8 @@ function Landmark(data) {
   self.lat = data.lat;
   self.long = data.long;
   self.class = data.class;
+
+  self.visible = ko.observable(true);
 
   // Creates empty string for infowindow
   self.infoString = '';
@@ -207,12 +211,12 @@ function Landmark(data) {
   });
 */
 
-/*
+
   // Triggers marker when filterable list item is clicked
   self.animate = function() {
     google.maps.event.trigger(self.marker, 'click');
   };
-*/
+
 
 }
 
@@ -223,6 +227,41 @@ Landmark.prototype.active = null;
 
 function AppViewModel() {
   var self = this;
+  self.locationList = ko.observableArray([]);
+  self.searchTerm = ko.observable("");
+
+  // Adds locations to observable array
+  locationData.forEach(function(locationItem){
+    self.locationList.push( new Landmark(locationItem));
+  });
+
+  // Filters locations based upon input in input field
+  self.filteredList = ko.computed( function() {
+    var filter = self.searchTerm().toLowerCase();
+    if (!filter) {
+      self.locationList().forEach(function(locationItem){
+        locationItem.visible(true);
+      });
+      return self.locationList();
+    } else {
+      return ko.utils.arrayFilter(self.locationList(), function(locationItem) {
+        var string = locationItem.name.toLowerCase();
+        var result = (string.search(filter) >= 0);
+        locationItem.visible(result);
+        return result;
+      });
+    }
+  }, self);
+
+}
+
+
+
+
+
+
+
+function initMap() {
 
   // Defines styles for the map
   var styles = [
@@ -311,63 +350,17 @@ function AppViewModel() {
         ]}
   ]
 
-  this.searchTerm = ko.observable("");
 
-  this.locationList = ko.observableArray([]);
-
-  self.visible = ko.observable(true);
-
-/*
-  // Creates map object
   map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 14,
-      center: {lat: 41.8992, lng: 12.4731},
-      styles: styles,
-      mapTypeControl: false
-  });
-*/
-
-  // Adds locations to observable array
-  locationData.forEach(function(locationItem){
-    self.locationList.push( new Landmark(locationItem));
+    zoom: 14,
+    center: {lat: 41.8992, lng: 12.4731},
+    styles: styles,
+    mapTypeControl: false
   });
 
-  // Filters locations based upon input in input field
-  this.filteredList = ko.computed( function() {
-    var filter = self.searchTerm().toLowerCase();
-    if (!filter) {
-      self.locationList().forEach(function(locationItem){
-        locationItem.visible(true);
-      });
-      return self.locationList();
-    } else {
-      return ko.utils.arrayFilter(self.locationList(), function(locationItem) {
-        var string = locationItem.name.toLowerCase();
-        var result = (string.search(filter) >= 0);
-        locationItem.visible(result);
-        return result;
-      });
-    }
-  }, self);
 
-}
-
-
-
-
-
-
-
-function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 14,
-      center: {lat: 41.8992, lng: 12.4731},
-      styles: styles,
-      mapTypeControl: false
-    });
-
-    // Activate Knockout once the map is initialized
-    ko.applyBindings(new AppViewModel());
+  // Activate Knockout once the map is initialized
+  ko.applyBindings(new AppViewModel());
 }
 
 
