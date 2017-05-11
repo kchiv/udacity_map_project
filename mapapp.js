@@ -38,6 +38,12 @@ var locationData = [
 
 
 
+
+
+
+
+
+
 var Landmark = function(data) {
   
   var self = this;
@@ -46,6 +52,7 @@ var Landmark = function(data) {
   self.lat = data.lat;
   self.long = data.long;
   self.class = data.class;
+  self.flickrContent = null;
 
   self.visible = ko.observable(true);
 
@@ -83,6 +90,30 @@ var Landmark = function(data) {
 
 
 
+
+
+
+  // Parameters for knowledge graph API
+  self.params = {
+    'query': data.name,
+    'limit': 1,
+    'indent': true,
+    'key' : 'AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM',
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   self.showInfoWindow = function() {
     if (!self.infoWindow.getContent()) {
       self.infoWindow.setContent('Loading content...');
@@ -91,6 +122,24 @@ var Landmark = function(data) {
       content += '<h2>View Images</h2><div class="flickimages"></div></div>';
       self.infoWindow.setContent(content);
     }
+
+    // Build the Flickr content for the info window, if hasn't been done
+    if (!self.flickrContent) {
+        // Use Flickr API to retrieve photos related to the location,
+        // then display the data using a callback function
+        flickr.getPhotos(self.name, function(results) {
+            var content = '<div class="flickr-box">';
+            content += '<h3 class="flickr-headline">Flickr Photos</h3>';
+            results.forEach(function(info) {
+                content += '<img src="' + info.imgThumbUrl + '"></a>';
+            });
+            content +='</div>';
+            self.flickrContent = content;
+            var allContent = self.infoWindow.getContent() + content;
+            self.infoWindow.setContent(allContent);
+        });
+    }
+
 
     self.infoWindow.open(map, self.marker);
 
@@ -136,6 +185,14 @@ var Landmark = function(data) {
   self.marker.addListener('click', self.mapMarkerClickHandler);
 
   self.infoWindow.addListener('closeclick', self.infoWindowCloseClickHandler);
+
+
+
+
+
+
+
+
 
 
 
@@ -211,6 +268,10 @@ var Landmark = function(data) {
   });
 */
 
+  // Limits bounce animation
+  setTimeout(function() {
+    self.marker.setAnimation(null);
+  }, 3500);
 
   // Triggers marker when filterable list item is clicked
   self.animate = function() {
@@ -221,7 +282,7 @@ var Landmark = function(data) {
 }
 
 
-Landmark.prototype.active = null;
+//Landmark.prototype.active = null;
 
 
 
@@ -254,6 +315,29 @@ function AppViewModel() {
   }, self);
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
