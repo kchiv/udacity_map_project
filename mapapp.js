@@ -155,6 +155,11 @@ var Landmark = function(data) {
     self.marker.setAnimation(google.maps.Animation.BOUNCE);
     self.showInfoWindow();
 
+    // Limits bounce animation
+    setTimeout(function() {
+      self.marker.setAnimation(null);
+    }, 3500);
+
     Landmark.prototype.active = self;
   };
 
@@ -267,11 +272,6 @@ var Landmark = function(data) {
 
   });
 */
-
-  // Limits bounce animation
-  setTimeout(function() {
-    self.marker.setAnimation(null);
-  }, 3500);
 
   // Triggers marker when filterable list item is clicked
   self.animate = function() {
