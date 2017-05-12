@@ -9,10 +9,34 @@ function Google() {
     });
   }
 
+
+  function initInfoObjecttwo(photoData) {
+    var knowurl = photoData.itemListElement[0].result.image.contentUrl;
+    var knowcontent = photoData.itemListElement[0].result.detailedDescription.articleBody;
+    var obj = {
+      imgknow: knowurl,
+      contentknow: knowcontent
+    }
+    return obj;
+  }
+
   this.getKnow = function(landmarkname, callback) {
     searchknow(landmarkname, function(results) {
-      var conthing = results.itemListElement[0].result;
-      return conthing;
+      var photos = results.photos.photo;
+      var infoObjects = [];
+      var infoObj;
+      var getInfoCounter = 0;
+      // Iterate over each photo result, building URLs for the source
+      // images as well as collecting extra info about the photo
+      for (var i = 0; i < photos.length; i++) {
+        // Create info object, initially containing photo's source URLs
+        infoObj = initInfoObject(photos[i]);
+        infoObjects.push(infoObj);
+        getInfoCounter++;
+        if (getInfoCounter === photos.length) {
+          callback(infoObjects);
+        }
+      }
     });
   };
 
@@ -32,7 +56,7 @@ function Google() {
 
 
 function Flickr() {
-  var flickrAPI = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=3929dc66b4439e3261143f1187ad2031&text={landmarkname}&per_page=15&format=json&nojsoncallback=1';
+  var flickrAPI = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=3929dc66b4439e3261143f1187ad2031&text={landmarkname}&sort=relevance&per_page=15&format=json&nojsoncallback=1';
   var imgsourceURL = 'https://farm{farm_id}.static.flickr.com/{server_id}/{photo_id}_{secret}_m.jpg';
 
   function search(landmarkname, callback) {
