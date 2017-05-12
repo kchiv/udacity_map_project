@@ -53,6 +53,7 @@ var Landmark = function(data) {
   self.long = data.long;
   self.class = data.class;
   self.flickrContent = null;
+  self.knowContent = null;
 
   self.visible = ko.observable(true);
 
@@ -93,16 +94,6 @@ var Landmark = function(data) {
 
 
 
-  // Parameters for knowledge graph API
-  self.params = {
-    'query': data.name,
-    'limit': 1,
-    'indent': true,
-    'key' : 'AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM',
-  };
-
-
-
 
 
 
@@ -125,20 +116,60 @@ var Landmark = function(data) {
 
     // Build the Flickr content for the info window, if hasn't been done
     if (!self.flickrContent) {
-        // Use Flickr API to retrieve photos related to the location,
-        // then display the data using a callback function
-        flickr.getPhotos(self.name, function(results) {
-            var content = '<div class="flickr-box">';
-            content += '<h3 class="flickr-headline">Flickr Photos</h3>';
-            results.forEach(function(info) {
-                content += '<img src="' + info.imgThumbUrl + '"></a>';
-            });
-            content +='</div>';
-            self.flickrContent = content;
-            var allContent = self.infoWindow.getContent() + content;
-            self.infoWindow.setContent(allContent);
-        });
+      // Use Flickr API to retrieve photos related to the location,
+      // then display the data using a callback function
+      flickr.getPhotos(self.name, function(results) {
+          var content = '<div class="flickr-box">';
+          content += '<h3 class="flickr-headline">Flickr Photos</h3>';
+          results.forEach(function(info) {
+              content += '<img src="' + info.imgThumbUrl + '"></a>';
+          });
+          content +='</div>';
+          self.flickrContent = content;
+          var allContent = self.infoWindow.getContent() + content;
+          self.infoWindow.setContent(allContent);
+      });
     }
+
+    if (!self.knowContent) {
+      google.getKnow(self.name, function(results) {
+        var content = '<div class="box">';
+        content += '<h3 class="flickr-headline">KnowGraph</h3>';
+        content += '<div>' + results.image.contentUrl + '</div>';
+        content +='</div>';
+        self.knowContent = content;
+        var moreContent = self.infoWindow.getContent() + content;
+        self.infoWindow.setContent(moreContent);
+      });
+    }
+
+
+
+
+
+
+
+/*
+    var service_url = 'https://kgsearch.googleapis.com/v1/entities:search';
+
+    // Parameters for knowledge graph API
+    self.params = {
+      'query': self.name,
+      'limit': 1,
+      'indent': true,
+      'key' : 'AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM',
+    };
+
+    $.getJSON(service_url + '?callback=?', self.params, function(response) {
+      //var descriptionitem = JSON.parse(response);
+      console.log(response.itemListElement[0].result.image.contentUrl);
+      console.log(response.itemListElement[0].result.detailedDescription.articleBody);
+    });
+*/
+
+
+
+
 
 
     self.infoWindow.open(map, self.marker);
