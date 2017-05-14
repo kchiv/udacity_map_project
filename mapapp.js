@@ -131,15 +131,21 @@ var Landmark = function(data) {
       });
     }
 
+
     if (!self.knowContent) {
-      google.getKnow(self.name, function(results) {
-        var content = '<div class="box">';
-        content += '<h3 class="flickr-headline">KnowGraph</h3>';
-        content += '<div>' + results.image.contentUrl + '</div>';
-        content +='</div>';
+      var service_url = 'https://kgsearch.googleapis.com/v1/entities:search?query=' + self.name + '&key=AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM&limit=1&indent=True';
+
+      $.getJSON(service_url, function(response) {
+        //var descriptionitem = JSON.parse(response);
+        var content = '<div>' + response.itemListElement[0].result.image.contentUrl + '</div>';
+        content +=  '<div>' + response.itemListElement[0].result.detailedDescription.articleBody + '</div>';
         self.knowContent = content;
-        var moreContent = self.infoWindow.getContent() + content;
-        self.infoWindow.setContent(moreContent);
+        var allContent = self.infoWindow.getContent() + content;
+        self.infoWindow.setContent(allContent);
+      });
+      $.getJSON(service_url).fail(function() {
+        alert('ERROR: Failed to search Flickr for related photos');
+        console.log('ERROR: Flickr photos.search failed');
       });
     }
 
