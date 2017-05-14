@@ -113,7 +113,7 @@ var Landmark = function(data) {
     }
 
     if (!self.knowContent) {
-      var service_url = 'https://gsearch.googleapis.com/v1/entities:search?query=' + self.name + '&key=AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM&limit=1&indent=True';
+      var service_url = 'https://kgsearch.googleapis.com/v1/entities:search?query=' + self.name + '&key=AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM&limit=1&indent=True';
 
       $.getJSON(service_url, function(response) {
         //var descriptionitem = JSON.parse(response);
