@@ -2,38 +2,38 @@ var map;
 
 // Location data
 var locationData = [
-  {name: 'Colosseum', lat: 41.8902, long: 12.4922, class: 'colo'},
-  {name: 'Pantheon', lat: 41.8986, long: 12.4769, class: 'pan'},
-  {name: 'Roman Forum', lat: 41.8925, long: 12.4853, class: 'forum'},
-  {name: 'Trevi Fountain', lat: 41.9009, long: 12.4833, class: 'fountain'},
-  {name: 'St. Peter\'s Basilica', lat: 41.9022, long: 12.4539, class: 'basil'},
-  {name: 'Castel Sant\'Angelo', lat: 41.9031, long: 12.4663, class: 'angelo'},
-  {name: 'Palatine Hill', lat: 41.8894, long: 12.4875, class: 'palatine'},
-  {name: 'Vatican Museums', lat: 41.9065, long: 12.4536, class: 'vatican'},
-  {name: 'Sistine Chapel', lat: 41.9029, long: 12.4545, class: 'sistine'},
-  {name: 'Piazza Navona', lat: 41.8992, long: 12.4731, class: 'piazza'},
-  {name: 'Spanish Steps', lat: 41.9060, long: 12.4828, class: 'spanish'},
-  {name: 'Capitoline Hill', lat: 41.8934, long: 12.4828, class: 'capitoline'},
-  {name: 'Galleria Borghese', lat: 41.9142, long: 12.4921, class: 'borghese'},
-  {name: 'Basilica di Maggiore', lat: 41.8976, long: 12.4984, class: 'maggiore'},
-  {name: 'Altare della Patria', lat: 41.8946, long: 12.4831, class: 'patria'},
-  {name: 'Piazza di Spagna', lat: 41.9057, long: 12.4823, class: 'spagna'},
-  {name: 'Bocca della Verità', lat: 41.8881, long: 12.4814, class: 'verita'},
-  {name: 'Arch of Constantine', lat: 41.8898, long: 12.4906, class: 'constantine'},
-  {name: 'Circus Maximus', lat: 41.8861, long: 12.4851, class: 'maximus'},
-  {name: 'Aventine Hill', lat: 41.8825, long: 12.4776, class: 'aventine'},
-  {name: 'Campo de\' Fiori', lat: 41.8956, long: 12.4722, class: 'fiori'},
-  {name: 'Ponte Sisto', lat: 41.8924, long: 12.4708, class: 'sisto'},
-  {name: 'Piazza Barberini', lat: 41.9038, long: 12.4886, class: 'barberini'},
-  {name: 'Quirinal Palace', lat: 41.8996, long: 12.4870, class: 'quirinal'},
-  {name: 'Palazzo delle Esposizioni', lat: 41.8995, long: 12.4901, class: 'esposizioni'},
-  {name: 'Santa Cecilia in Trastevere', lat: 41.8876, long: 12.4758, class: 'trastevere'},
-  {name: 'Trajan\'s Market', lat: 41.8956, long: 12.4862, class: 'trajmarket'},
-  {name: 'Trajan\'s Forum', lat: 41.8952, long: 12.4853, class: 'trajforum'},
-  {name: 'Trajan\'s Column', lat: 41.8958, long: 12.4843, class: 'trajcol'},
-  {name: 'Forum of Augustus', lat: 41.8943, long: 12.4869, class: 'augustus'},
-  {name: 'Capitoline Museums', lat: 41.8929, long: 12.4826, class: 'capitolinemuse'},
-  {name: 'Theatre of Marcellus', lat: 41.8919, long: 12.4799, class: 'theatre'}
+  {name: 'Colosseum', lat: 41.8902, long: 12.4922},
+  {name: 'Pantheon', lat: 41.8986, long: 12.4769},
+  {name: 'Roman Forum', lat: 41.8925, long: 12.4853},
+  {name: 'Trevi Fountain', lat: 41.9009, long: 12.4833},
+  {name: 'St. Peter\'s Basilica', lat: 41.9022, long: 12.4539},
+  {name: 'Castel Sant\'Angelo', lat: 41.9031, long: 12.4663},
+  {name: 'Palatine Hill', lat: 41.8894, long: 12.4875},
+  {name: 'Vatican Museums', lat: 41.9065, long: 12.4536},
+  {name: 'Sistine Chapel', lat: 41.9029, long: 12.4545},
+  {name: 'Piazza Navona', lat: 41.8992, long: 12.4731},
+  {name: 'Spanish Steps', lat: 41.9060, long: 12.4828},
+  {name: 'Capitoline Hill', lat: 41.8934, long: 12.4828},
+  {name: 'Galleria Borghese', lat: 41.9142, long: 12.4921},
+  {name: 'Basilica di Maggiore', lat: 41.8976, long: 12.4984},
+  {name: 'Altare della Patria', lat: 41.8946, long: 12.4831},
+  {name: 'Piazza di Spagna', lat: 41.9057, long: 12.4823},
+  {name: 'Bocca della Verità', lat: 41.8881, long: 12.4814},
+  {name: 'Arch of Constantine', lat: 41.8898, long: 12.4906},
+  {name: 'Circus Maximus', lat: 41.8861, long: 12.4851},
+  {name: 'Aventine Hill', lat: 41.8825, long: 12.4776},
+  {name: 'Campo de\' Fiori', lat: 41.8956, long: 12.4722},
+  {name: 'Ponte Sisto', lat: 41.8924, long: 12.4708},
+  {name: 'Piazza Barberini', lat: 41.9038, long: 12.4886},
+  {name: 'Quirinal Palace', lat: 41.8996, long: 12.4870},
+  {name: 'Palazzo delle Esposizioni', lat: 41.8995, long: 12.4901},
+  {name: 'Santa Cecilia in Trastevere', lat: 41.8876, long: 12.4758},
+  {name: 'Trajan\'s Market', lat: 41.8956, long: 12.4862},
+  {name: 'Trajan\'s Forum', lat: 41.8952, long: 12.4853},
+  {name: 'Trajan\'s Column', lat: 41.8958, long: 12.4843},
+  {name: 'Forum of Augustus', lat: 41.8943, long: 12.4869},
+  {name: 'Capitoline Museums', lat: 41.8929, long: 12.4826},
+  {name: 'Theatre of Marcellus', lat: 41.8919, long: 12.4799}
 ];
 
 
@@ -107,11 +107,28 @@ var Landmark = function(data) {
 
   self.showInfoWindow = function() {
     if (!self.infoWindow.getContent()) {
-      self.infoWindow.setContent('Loading content...');
       var content = '<div class="info-window-content"><div class="title"><h2>' + self.name + "</h2></div>";
-      content += '<div class="accordion"><h2>View Details</h2><div class="' + self.class + '"></div>';
-      content += '<h2>View Images</h2><div class="flickimages"></div></div>';
+      content += '<div class="accordion"><h2>View Details</h2>';
       self.infoWindow.setContent(content);
+    }
+
+    if (!self.knowContent) {
+      var service_url = 'https://gsearch.googleapis.com/v1/entities:search?query=' + self.name + '&key=AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM&limit=1&indent=True';
+
+      $.getJSON(service_url, function(response) {
+        //var descriptionitem = JSON.parse(response);
+        var content = '<div><img id="theimg" class="img-thumbnail img-responsive center-block" src="' + response.itemListElement[0].result.image.contentUrl + '"/>'
+        content +=  '<div id="thebody">' + response.itemListElement[0].result.detailedDescription.articleBody + '</div></div>';
+        self.knowContent = content;
+        var allContent = self.infoWindow.getContent() + content;
+        self.infoWindow.setContent(allContent);
+      });
+      $.getJSON(service_url).fail(function() {
+        var content = 'Could not retrieve information about the ' + self.name;
+        self.knowContent = content;
+        var errorContent = self.infoWindow.getContent() + content;
+        self.infoWindow.setContent(errorContent);
+      });
     }
 
     // Build the Flickr content for the info window, if hasn't been done
@@ -119,33 +136,14 @@ var Landmark = function(data) {
       // Use Flickr API to retrieve photos related to the location,
       // then display the data using a callback function
       flickr.getPhotos(self.name, function(results) {
-          var content = '<div class="flickr-box">';
-          content += '<h3 class="flickr-headline">Flickr Photos</h3>';
+          var content = '<h2>View Images</h2><div>';
           results.forEach(function(info) {
-              content += '<img src="' + info.imgThumbUrl + '"></a>';
+              content += '<img class="img-thumbnail img-responsive" src="' + info.imgThumbUrl + '"/>';
           });
-          content +='</div>';
+          content +='</div></div>';
           self.flickrContent = content;
           var allContent = self.infoWindow.getContent() + content;
           self.infoWindow.setContent(allContent);
-      });
-    }
-
-
-    if (!self.knowContent) {
-      var service_url = 'https://kgsearch.googleapis.com/v1/entities:search?query=' + self.name + '&key=AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM&limit=1&indent=True';
-
-      $.getJSON(service_url, function(response) {
-        //var descriptionitem = JSON.parse(response);
-        var content = '<div>' + response.itemListElement[0].result.image.contentUrl + '</div>';
-        content +=  '<div>' + response.itemListElement[0].result.detailedDescription.articleBody + '</div>';
-        self.knowContent = content;
-        var allContent = self.infoWindow.getContent() + content;
-        self.infoWindow.setContent(allContent);
-      });
-      $.getJSON(service_url).fail(function() {
-        alert('ERROR: Failed to search Flickr for related photos');
-        console.log('ERROR: Flickr photos.search failed');
       });
     }
 
@@ -172,10 +170,6 @@ var Landmark = function(data) {
       console.log(response.itemListElement[0].result.detailedDescription.articleBody);
     });
 */
-
-
-
-
 
 
     self.infoWindow.open(map, self.marker);
@@ -281,6 +275,8 @@ var Landmark = function(data) {
         $('.' + data.class).prepend($('<img>',{class:'img-thumbnail img-responsive center-block', id:'theimg',src:element['result']['image']['contentUrl']}));
       });
     });
+
+
 
     // Sets infowindow content 
     self.infoWindow.setContent(self.infoString);
