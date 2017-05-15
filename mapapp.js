@@ -91,7 +91,7 @@ var Landmark = function(data) {
       var service_url = 'https://kgsearch.googleapis.com/v1/entities:search?query=' + self.name + '&key=AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM&limit=1&indent=True';
 
       $.getJSON(service_url, function(response) {
-        var content = '<div><img id="theimg" class="img-thumbnail img-responsive center-block" src="' + response.itemListElement[0].result.image.contentUrl + '"/>'
+        var content = '<div><img id="theimg" class="img-thumbnail img-responsive center-block" src="' + response.itemListElement[0].result.image.contentUrl + '"/>';
         content +=  '<p id="thebody">' + response.itemListElement[0].result.detailedDescription.articleBody + '</p></div>';
         self.knowInfo = content;
         var addContent = self.infoWindow.getContent() + content;
@@ -122,13 +122,13 @@ var Landmark = function(data) {
 
     self.infoWindow.open(map, self.marker);
 
-  }
+  };
 
   self.activateInfo = function() {
     // Deactivates infowindow if another landmark is activated
-    if (Landmark.prototype.active) {
-      if (Landmark.prototype.active !== self) {
-        Landmark.prototype.active.deactivateInfo();
+    if (Landmark.active) {
+      if (Landmark.active !== self) {
+        Landmark.active.deactivateInfo();
       }
     }
 
@@ -147,20 +147,20 @@ var Landmark = function(data) {
     map.panTo(self.marker.getPosition());
 
     // Sets current landmark as active
-    Landmark.prototype.active = self;
+    Landmark.active = self;
   };
 
   // Function for deactivating the infowindow
   self.deactivateInfo = function() {
     self.infoWindow.close();
 
-    Landmark.prototype.active = null;
+    Landmark.active = null;
   };
 
   // Activate infowindow for clicked marker and deactivate
   // for previously selected marker
   self.clickMarker = function() {
-    if (Landmark.prototype.active === self) {
+    if (Landmark.active === self) {
       self.deactivateInfo();
     } else {
       self.activateInfo();
@@ -170,7 +170,7 @@ var Landmark = function(data) {
   // Deactivates infowindow when clicking close button
   self.closeInfoWindow = function() {
     self.deactivateInfo();
-  }
+  };
 
   self.marker.addListener('click', self.clickMarker);
 
@@ -182,7 +182,7 @@ var Landmark = function(data) {
   };
 
 
-}
+};
 
 
 function AppViewModel() {
@@ -303,7 +303,7 @@ function initMap() {
             { "color": "#f19f53" },
             { "lightness": -10}
         ]}
-  ]
+  ];
 
   // Creates Google Map object
   map = new google.maps.Map(document.getElementById('map'), {
@@ -350,7 +350,7 @@ function Flickr() {
     var url = 'https://farm' + info.farm + '.static.flickr.com/' + info.server + '/' + info.id + '_' + info.secret + '_m.jpg';
     var imageObj = {
       cdnUrl: url
-    }
+    };
     return imageObj;
   }
 
