@@ -108,7 +108,7 @@ var Landmark = function(data) {
   self.showInfoWindow = function() {
     if (!self.infoWindow.getContent()) {
       var content = '<div class="info-window-content"><div class="title"><h2>' + self.name + "</h2></div>";
-      content += '<div class="accordion"><h2>View Details</h2>';
+      content += '<div id="accordion"><h2>View Details</h2>';
       self.infoWindow.setContent(content);
     }
 
@@ -118,7 +118,7 @@ var Landmark = function(data) {
       $.getJSON(service_url, function(response) {
         //var descriptionitem = JSON.parse(response);
         var content = '<div><img id="theimg" class="img-thumbnail img-responsive center-block" src="' + response.itemListElement[0].result.image.contentUrl + '"/>'
-        content +=  '<div id="thebody">' + response.itemListElement[0].result.detailedDescription.articleBody + '</div></div>';
+        content +=  '<p id="thebody">' + response.itemListElement[0].result.detailedDescription.articleBody + '</p></div>';
         self.knowContent = content;
         var allContent = self.infoWindow.getContent() + content;
         self.infoWindow.setContent(allContent);
@@ -136,11 +136,11 @@ var Landmark = function(data) {
       // Use Flickr API to retrieve photos related to the location,
       // then display the data using a callback function
       flickr.getPhotos(self.name, function(results) {
-          var content = '<h2>View Images</h2><div>';
+          var content = '<h2>View Images</h2>';
           results.forEach(function(info) {
-              content += '<img class="img-thumbnail img-responsive" src="' + info.imgThumbUrl + '"/>';
+              content += '<div><img class="img-thumbnail img-responsive" src="' + info.imgThumbUrl + '"/></div>';
           });
-          content +='</div></div>';
+          content +='</div>';
           self.flickrContent = content;
           var allContent = self.infoWindow.getContent() + content;
           self.infoWindow.setContent(allContent);
