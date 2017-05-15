@@ -77,21 +77,20 @@ var Landmark = function(data) {
   }, self);
 
 
-
-
-
+  // Adds content to infowindow
   self.showInfoWindow = function() {
+    // Adds basic content to infowindow
     if (!self.infoWindow.getContent()) {
       var content = '<div class="info-window-content"><div class="title"><h2>' + self.name + "</h2></div>";
       content += '<div id="accordion"><h2>View Details</h2>';
       self.infoWindow.setContent(content);
     }
 
+    // Adds knowledge graph content to infowindow
     if (!self.knowContent) {
       var service_url = 'https://kgsearch.googleapis.com/v1/entities:search?query=' + self.name + '&key=AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM&limit=1&indent=True';
 
       $.getJSON(service_url, function(response) {
-        //var descriptionitem = JSON.parse(response);
         var content = '<div><img id="theimg" class="img-thumbnail img-responsive center-block" src="' + response.itemListElement[0].result.image.contentUrl + '"/>'
         content +=  '<p id="thebody">' + response.itemListElement[0].result.detailedDescription.articleBody + '</p></div>';
         self.knowContent = content;
@@ -106,10 +105,8 @@ var Landmark = function(data) {
       });
     }
 
-    // Build the Flickr content for the info window, if hasn't been done
+    // Adds flickr content to infowindow
     if (!self.flickrContent) {
-      // Use Flickr API to retrieve photos related to the location,
-      // then display the data using a callback function
       flickr.getPhotos(self.name, function(results) {
           var content = '<h2>View Images</h2>';
           results.forEach(function(info) {
@@ -173,89 +170,6 @@ var Landmark = function(data) {
 
   self.infoWindow.addListener('closeclick', self.infoWindowCloseClickHandler);
 
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-  // Endpoint for Flickr API
-  var flickrAPI = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=3929dc66b4439e3261143f1187ad2031&text=';
-
-  // Endpoint for knowledge graph API
-  var service_url = 'https://kgsearch.googleapis.com/v1/entities:search';
-
-  // Parameters for knowledge graph API
-  self.params = {
-    'query': data.name,
-    'limit': 1,
-    'indent': true,
-    'key' : 'AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM',
-  };
-*/
-
-
-/* 
-  // Adding click listeners on markers
- self.marker.addListener('click', function(){
-    // Populates content string for infowindow
-    self.infoString = '<div class="info-window-content"><div class="title"><h2>' + data.name + "</h2></div>" +
-        '<div class="accordion"><h2>View Details</h2><div class="' + data.class + '"></div>' +
-        '<h2>View Images</h2><div class="flickimages"></div></div>';
-
-    // Gets image data from Flickr API and adds it to infowindow
-    $.getJSON(flickrAPI + data.name + "&per_page=15&format=json&jsoncallback=?", function(response){
-      $.each(response.photos.photo, function(i, element){
-        src = "http://farm"+ element.farm +".static.flickr.com/"+ element.server +"/"+ element.id +"_"+ element.secret +"_m.jpg";
-        $('<img class="img-thumbnail img-responsive">').attr("src", src).appendTo(".flickimages");
-      });
-    });
-
-    // Gets image and description data from Google Knowledge Graph API
-    $.getJSON(service_url + '?callback=?', self.params, function(response) {
-      $.each(response.itemListElement, function(i, element) {
-        $('<div>', {id:'thebody', text:element['result']['detailedDescription']['articleBody']}).appendTo('.' + data.class);
-        $('.' + data.class).prepend($('<img>',{class:'img-thumbnail img-responsive center-block', id:'theimg',src:element['result']['image']['contentUrl']}));
-      });
-    });
-
-
-
-    // Sets infowindow content 
-    self.infoWindow.setContent(self.infoString);
-
-    // Centers map on clicked marker
-    map.panTo(self.marker.getPosition());
-
-    // Attach the info window to a new marker
-    self.infoWindow.open(map, self.marker);
-
-    // Creates marker animation
-    self.marker.setAnimation(google.maps.Animation.BOUNCE);
-    
-    // Limits bounce animation
-    setTimeout(function() {
-      self.marker.setAnimation(null);
-    }, 3000);
-
-    // Expand collapse jQuery function
-    $( function() {
-      $( ".accordion" ).accordion({
-        collapsible: true,
-        active: false
-      });
-    } );
-
-  });
-*/
-
   // Triggers marker when filterable list item is clicked
   self.animate = function() {
     google.maps.event.trigger(self.marker, 'click');
@@ -263,10 +177,6 @@ var Landmark = function(data) {
 
 
 }
-
-
-//Landmark.prototype.active = null;
-
 
 
 function AppViewModel() {
@@ -298,34 +208,6 @@ function AppViewModel() {
   }, self);
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 function initMap() {
@@ -433,8 +315,6 @@ function initMap() {
 
 
 
-
-
 // Function to create custom marker color
 function makeMarkerIcon(markerColor) {
   var markerImage = new google.maps.MarkerImage(
@@ -450,3 +330,55 @@ function makeMarkerIcon(markerColor) {
 function mapError() {
     alert('Google Maps could not load!');
 }
+
+
+
+
+function Flickr() {
+  var flickrAPI = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=3929dc66b4439e3261143f1187ad2031&text={landmarkname}&sort=relevance&per_page=15&format=json&nojsoncallback=1';
+  var imgsourceURL = 'https://farm{farm_id}.static.flickr.com/{server_id}/{photo_id}_{secret}_m.jpg';
+
+  function search(landmarkname, callback) {
+    var url = flickrAPI.replace('{landmarkname}', landmarkname);
+    $.getJSON(url, callback).fail(function() {
+      alert('ERROR: Failed to search Flickr for related photos');
+      console.log('ERROR: Flickr photos.search failed');
+    });
+  }
+
+  function initInfoObject(photoData) {
+    var url = imgsourceURL.replace('{farm_id}', photoData.farm)
+      .replace('{server_id}', photoData.server)
+      .replace('{photo_id}', photoData.id)
+      .replace('{secret}', photoData.secret);
+    var obj = {
+      imgThumbUrl: url
+    }
+    return obj;
+  }
+
+
+  this.getPhotos = function(landmarkname, callback) {
+    search(landmarkname, function(results) {
+      var photos = results.photos.photo;
+      var infoObjects = [];
+      var infoObj;
+      var getInfoCounter = 0;
+      // Iterate over each photo result, building URLs for the source
+      // images as well as collecting extra info about the photo
+      for (var i = 0; i < photos.length; i++) {
+        // Create info object, initially containing photo's source URLs
+        infoObj = initInfoObject(photos[i]);
+        infoObjects.push(infoObj);
+        getInfoCounter++;
+        if (getInfoCounter === photos.length) {
+          callback(infoObjects);
+        }
+      }
+    });
+  };
+
+}
+
+
+var flickr = new Flickr();
