@@ -4,7 +4,6 @@
     <title>Rome Tourism App</title>
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   </head>
   <body>
@@ -33,7 +32,8 @@
    <script type="text/javascript" src="mapapp.js"></script>
    <script type="text/javascript" src="flickr.js"></script>
    <script type="text/javascript" src="lib/knockout-3.4.2.js"></script>
-   <script async defer
+   <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+   <script async defer onerror="mapError()"
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM&libraries=places,geometry&v=3&callback=initMap">
    </script>
  </body>

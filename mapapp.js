@@ -496,3 +496,7 @@ function makeMarkerIcon(markerColor) {
     new google.maps.Size(21,34));
   return markerImage;
 }
+
+function mapError() {
+    alert('Google Maps could not load!');
+}
