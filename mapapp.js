@@ -44,8 +44,8 @@ var Landmark = function(data) {
   self.lat = data.lat;
   self.long = data.long;
   self.class = data.class;
-  self.flickrContent = null;
-  self.knowContent = null;
+  self.flickrPics = null;
+  self.knowInfo = null;
 
   self.visible = ko.observable(true);
 
@@ -78,44 +78,44 @@ var Landmark = function(data) {
 
 
   // Adds content to infowindow
-  self.showInfoWindow = function() {
+  self.showInfo = function() {
     // Adds basic content to infowindow
     if (!self.infoWindow.getContent()) {
       var content = '<div class="info-window-content"><div class="title"><h2>' + self.name + "</h2></div>";
-      content += '<div id="accordion"><h2>View Details</h2>';
+      content += '<div id="accordion"><h2>Details</h2>';
       self.infoWindow.setContent(content);
     }
 
     // Adds knowledge graph content to infowindow
-    if (!self.knowContent) {
+    if (!self.knowInfo) {
       var service_url = 'https://kgsearch.googleapis.com/v1/entities:search?query=' + self.name + '&key=AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM&limit=1&indent=True';
 
       $.getJSON(service_url, function(response) {
         var content = '<div><img id="theimg" class="img-thumbnail img-responsive center-block" src="' + response.itemListElement[0].result.image.contentUrl + '"/>'
         content +=  '<p id="thebody">' + response.itemListElement[0].result.detailedDescription.articleBody + '</p></div>';
-        self.knowContent = content;
-        var allContent = self.infoWindow.getContent() + content;
-        self.infoWindow.setContent(allContent);
+        self.knowInfo = content;
+        var addContent = self.infoWindow.getContent() + content;
+        self.infoWindow.setContent(addContent);
       });
       $.getJSON(service_url).fail(function() {
         var content = 'Could not retrieve information about the ' + self.name;
-        self.knowContent = content;
+        self.knowInfo = content;
         var errorContent = self.infoWindow.getContent() + content;
         self.infoWindow.setContent(errorContent);
       });
     }
 
     // Adds flickr content to infowindow
-    if (!self.flickrContent) {
-      flickr.getPhotos(self.name, function(results) {
-          var content = '<h2>View Images</h2>';
-          results.forEach(function(info) {
-              content += '<div><img class="img-thumbnail img-responsive" src="' + info.imgThumbUrl + '"/></div>';
-          });
-          content +='</div>';
-          self.flickrContent = content;
-          var allContent = self.infoWindow.getContent() + content;
-          self.infoWindow.setContent(allContent);
+    if (!self.flickrPics) {
+      flickr.flickrPhotos(self.name, function(results) {
+        var content = '<h2>Images</h2>';
+        results.forEach(function(results) {
+            content += '<div><img class="img-thumbnail img-responsive center-block" src="' + results.cdnUrl + '"/></div>';
+        });
+        content +='</div>';
+        self.flickrPics = content;
+        var addContent = self.infoWindow.getContent() + content;
+        self.infoWindow.setContent(addContent);
       });
     }
 
@@ -124,51 +124,57 @@ var Landmark = function(data) {
 
   }
 
-  self.activate = function() {
+  self.activateInfo = function() {
+    // Deactivates infowindow if another landmark is activated
     if (Landmark.prototype.active) {
       if (Landmark.prototype.active !== self) {
-        Landmark.prototype.active.deactivate();
+        Landmark.prototype.active.deactivateInfo();
       }
     }
 
+    // Creates marker bounce animation
     self.marker.setAnimation(google.maps.Animation.BOUNCE);
-    self.showInfoWindow();
+    
+    // Enables infowindow
+    self.showInfo();
 
     // Limits bounce animation
     setTimeout(function() {
       self.marker.setAnimation(null);
     }, 3500);
 
+    // Centers map to marker
+    map.panTo(self.marker.getPosition());
+
+    // Sets current landmark as active
     Landmark.prototype.active = self;
   };
 
-  self.deactivate = function() {
-    self.marker.setAnimation(null);
+  // Function for deactivating the infowindow
+  self.deactivateInfo = function() {
     self.infoWindow.close();
 
     Landmark.prototype.active = null;
   };
 
-  self.focus = function() {
-    map.panTo(self.marker.getPosition());
-    self.activate();
-  };
-
-  self.mapMarkerClickHandler = function() {
+  // Activate infowindow for clicked marker and deactivate
+  // for previously selected marker
+  self.clickMarker = function() {
     if (Landmark.prototype.active === self) {
-      self.deactivate();
+      self.deactivateInfo();
     } else {
-      self.activate();
+      self.activateInfo();
     }
   };
 
-  self.infoWindowCloseClickHandler = function() {
-    self.deactivate();
+  // Deactivates infowindow when clicking close button
+  self.closeInfoWindow = function() {
+    self.deactivateInfo();
   }
 
-  self.marker.addListener('click', self.mapMarkerClickHandler);
+  self.marker.addListener('click', self.clickMarker);
 
-  self.infoWindow.addListener('closeclick', self.infoWindowCloseClickHandler);
+  self.infoWindow.addListener('closeclick', self.closeInfoWindow);
 
   // Triggers marker when filterable list item is clicked
   self.animate = function() {
@@ -299,7 +305,7 @@ function initMap() {
         ]}
   ]
 
-
+  // Creates Google Map object
   map = new google.maps.Map(document.getElementById('map'), {
     zoom: 14,
     center: {lat: 41.8992, lng: 12.4731},
@@ -311,9 +317,6 @@ function initMap() {
   // Activate Knockout once the map is initialized
   ko.applyBindings(new AppViewModel());
 }
-
-
-
 
 // Function to create custom marker color
 function makeMarkerIcon(markerColor) {
@@ -327,52 +330,44 @@ function makeMarkerIcon(markerColor) {
   return markerImage;
 }
 
+// Creates alert if app cannot connect to Google Maps API
 function mapError() {
     alert('Google Maps could not load!');
 }
 
 
-
-
 function Flickr() {
-  var flickrAPI = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=3929dc66b4439e3261143f1187ad2031&text={landmarkname}&sort=relevance&per_page=15&format=json&nojsoncallback=1';
-  var imgsourceURL = 'https://farm{farm_id}.static.flickr.com/{server_id}/{photo_id}_{secret}_m.jpg';
-
-  function search(landmarkname, callback) {
-    var url = flickrAPI.replace('{landmarkname}', landmarkname);
-    $.getJSON(url, callback).fail(function() {
-      alert('ERROR: Failed to search Flickr for related photos');
-      console.log('ERROR: Flickr photos.search failed');
+  // Photo search function for Flickr API
+  function searchFlickr(landmarkname, callback) {
+    var flickrAPI = 'https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=3929dc66b4439e3261143f1187ad2031&text=' + landmarkname + '&sort=relevance&per_page=15&format=json&nojsoncallback=1';
+    $.getJSON(flickrAPI, callback).fail(function() {
+      alert('Flickr photos could not load!');
     });
   }
 
-  function initInfoObject(photoData) {
-    var url = imgsourceURL.replace('{farm_id}', photoData.farm)
-      .replace('{server_id}', photoData.server)
-      .replace('{photo_id}', photoData.id)
-      .replace('{secret}', photoData.secret);
-    var obj = {
-      imgThumbUrl: url
+  // Creates image object and builds image ref
+  function createImgObj(info) {
+    var url = 'https://farm' + info.farm + '.static.flickr.com/' + info.server + '/' + info.id + '_' + info.secret + '_m.jpg';
+    var imageObj = {
+      cdnUrl: url
     }
-    return obj;
+    return imageObj;
   }
 
-
-  this.getPhotos = function(landmarkname, callback) {
-    search(landmarkname, function(results) {
+  // Loops through image objects and builds URLs based upon data returned
+  // from Flickr API
+  this.flickrPhotos = function(landmarkname, callback) {
+    searchFlickr(landmarkname, function(results) {
       var photos = results.photos.photo;
-      var infoObjects = [];
-      var infoObj;
-      var getInfoCounter = 0;
-      // Iterate over each photo result, building URLs for the source
-      // images as well as collecting extra info about the photo
+      var photoArray = [];
+      var imageObject;
+      var photoIter = 0;
       for (var i = 0; i < photos.length; i++) {
-        // Create info object, initially containing photo's source URLs
-        infoObj = initInfoObject(photos[i]);
-        infoObjects.push(infoObj);
-        getInfoCounter++;
-        if (getInfoCounter === photos.length) {
-          callback(infoObjects);
+        imageObject = createImgObj(photos[i]);
+        photoArray.push(imageObject);
+        photoIter++;
+        if (photoIter === photos.length) {
+          callback(photoArray);
         }
       }
     });
