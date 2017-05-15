@@ -36,14 +36,6 @@ var locationData = [
   {name: 'Theatre of Marcellus', lat: 41.8919, long: 12.4799}
 ];
 
-
-
-
-
-
-
-
-
 var Landmark = function(data) {
   
   var self = this;
@@ -63,9 +55,8 @@ var Landmark = function(data) {
   // Creates infowindow object
   self.infoWindow = new google.maps.InfoWindow();
 
-  // Marker icon styles
+  // Marker icon style
   var defaultIcon = makeMarkerIcon('ff8100');
-  var highlightedIcon = makeMarkerIcon('FFFF24');
 
   // Creates marker objects
   self.marker = new google.maps.Marker({
@@ -84,22 +75,6 @@ var Landmark = function(data) {
     }
     return true;
   }, self);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -148,30 +123,6 @@ var Landmark = function(data) {
     }
 
 
-
-
-
-
-
-/*
-    var service_url = 'https://kgsearch.googleapis.com/v1/entities:search';
-
-    // Parameters for knowledge graph API
-    self.params = {
-      'query': self.name,
-      'limit': 1,
-      'indent': true,
-      'key' : 'AIzaSyBm1yQY89TOUlWsuCm4GhIov8XgWLcQQeM',
-    };
-
-    $.getJSON(service_url + '?callback=?', self.params, function(response) {
-      //var descriptionitem = JSON.parse(response);
-      console.log(response.itemListElement[0].result.image.contentUrl);
-      console.log(response.itemListElement[0].result.detailedDescription.articleBody);
-    });
-*/
-
-
     self.infoWindow.open(map, self.marker);
 
   }
@@ -202,7 +153,7 @@ var Landmark = function(data) {
   };
 
   self.focus = function() {
-    map.panTo({lat: self.lat, lng: self.long});
+    map.panTo(self.marker.getPosition());
     self.activate();
   };
 
@@ -221,7 +172,6 @@ var Landmark = function(data) {
   self.marker.addListener('click', self.mapMarkerClickHandler);
 
   self.infoWindow.addListener('closeclick', self.infoWindowCloseClickHandler);
-
 
 
 
